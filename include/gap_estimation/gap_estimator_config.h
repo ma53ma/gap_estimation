@@ -82,6 +82,10 @@ namespace gap_estimation {
             gap_viz.viz_jitter = 0.1;
             gap_viz.debug_viz = true;
 
+            gap_manip.reduction_threshold = M_PI;
+            gap_manip.reduction_target = M_PI;
+            gap_manip.max_idx_diff = 256;
+
             gap_assoc.assoc_thresh = 0.5;
 
             planning.feasi_inflated = false;

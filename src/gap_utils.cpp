@@ -217,12 +217,12 @@ namespace gap_estimation {
                                 // second test is checking if simplified gap dist is less than current min dist of raw gap
                                 // Changed this from - to + to make merging easier
                                 bool simp_left_raw_right_dist_test = curr_rdist <= (min_dist - coefs * cfg_->rbt.r_inscr) && 
-                                                                        simplified_gaps[j].RDist() <= (min_dist - coefs * cfg_->rbt.r_inscr);
+                                                                     simplified_gaps[j].RDist() <= (min_dist - coefs * cfg_->rbt.r_inscr);
                                 
                                 // left type just means if left side distance is less than right side distance
                                 bool left_or_radial = simplified_gaps[j].isRightType() || !simplified_gaps[j].isAxial();
                                 // making sure that this merged gap is not too large? max_idx_diff is 256 I'm pretty sure
-                                bool idx_diff = raw_gaps[i].LIdx() - simplified_gaps[j].RIdx() < cfg_->gap_manip.max_idx_diff;
+                                bool idx_diff = (raw_gaps[i].LIdx() - simplified_gaps[j].RIdx()) < cfg_->gap_manip.max_idx_diff;
                                 // ROS_INFO_STREAM("simp_left_raw_right_dist_test: " << simp_left_raw_right_dist_test << ", left_or_radial: " << left_or_radial << ", idx_diff: " << idx_diff);
                                 if (simp_left_raw_right_dist_test && left_or_radial && idx_diff) {
                                     last_mergable = j;

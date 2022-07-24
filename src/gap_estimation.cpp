@@ -31,8 +31,8 @@ namespace gap_estimation
         trajectory_pub = nh.advertise<geometry_msgs::PoseArray>("pg_traj", 1);
         dyn_egocircle_pub = nh.advertise<sensor_msgs::LaserScan>("dyn_egocircle", 1);
 
-        robot0_cmd_vel_pub = nh.advertise<geometry_msgs::PoseArray>("/robot0/cmd_vel", 1);
-        robot1_cmd_vel_pub = nh.advertise<geometry_msgs::PoseArray>("/robot1/cmd_vel", 1);
+        robot0_cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("/robot0/cmd_vel", 1);
+        robot1_cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("/robot1/cmd_vel", 1);
 
         rbt_accel_sub = nh.subscribe(cfg.robot_frame_id + "/acc", 1, &Planner::robotAccCB, this);
 
@@ -163,10 +163,10 @@ namespace gap_estimation
 
         if (i % 2 == 0) {
             //std::cout << "entering left model update" << std::endl;
-            g.right_model->kf_update_loop(laserscan_measurement, _a_ego, _v_ego, print, agent_odom_vects, agent_vels);
+            g.right_model->kf_update_loop(laserscan_measurement, _a_ego, _v_ego, print, agent_odom_vects, agent_vel_vects);
         } else {
             //std::cout << "entering right model update" << std::endl;
-            g.left_model->kf_update_loop(laserscan_measurement, _a_ego, _v_ego, print, agent_odom_vects, agent_vels);
+            g.left_model->kf_update_loop(laserscan_measurement, _a_ego, _v_ego, print, agent_odom_vects, agent_vel_vects);
         }
     }
 
@@ -242,8 +242,8 @@ namespace gap_estimation
             // ROS_INFO_STREAM("updating " << robot_namespace << " pose from: (" << agent_odom_vects[robot_id][0] << ", " << agent_odom_vects[robot_id][1] << ") to: (" << out_pose.pose.position.x << ", " << out_pose.pose.position.y << ")");
 
             std::vector<double> odom_vect{out_pose.pose.position.x, out_pose.pose.position.y};
-            agent_odom_vects[robot_id] = odom_vect;
             agent_odoms[robot_id] = out_pose.pose;
+            agent_odom_vects[robot_id] = odom_vect;
         } catch (tf2::TransformException &ex) {
             ROS_INFO_STREAM("Odometry transform failed for " << robot_namespace);
         }
@@ -261,8 +261,8 @@ namespace gap_estimation
             tf2::doTransform(in_vel, out_vel, agent_to_robot_trans);
             // std::cout << "outcoming vector: " << out_vel.vector.x << ", " << out_vel.vector.y << std::endl;
 
-            // ROS_INFO_STREAM("updating outvel " << robot_namespace << " from: (" << agent_vels[robot_id].vector.x << ", " << agent_vels[robot_id].vector.y << ") to: (" << out_vel.vector.x << ", " << out_vel.vector.y << ")");
-            // ROS_INFO_STREAM("updating outvel vect " << robot_namespace << " from: (" << agent_vel_vects[robot_id][0] << ", " << agent_vel_vects[robot_id][1] << ") to: (" << out_vel.vector.x << ", " << out_vel.vector.y << ")");
+            ROS_INFO_STREAM("updating outvel " << robot_namespace << " from: (" << agent_vels[robot_id].vector.x << ", " << agent_vels[robot_id].vector.y << ") to: (" << out_vel.vector.x << ", " << out_vel.vector.y << ")");
+            ROS_INFO_STREAM("updating outvel vect " << robot_namespace << " from: (" << agent_vel_vects[robot_id][0] << ", " << agent_vel_vects[robot_id][1] << ") to: (" << out_vel.vector.x << ", " << out_vel.vector.y << ")");
 
             std::vector<double> vel_vect{out_vel.vector.x, out_vel.vector.y};
 
