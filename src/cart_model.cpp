@@ -15,7 +15,7 @@
 #include <unsupported/Eigen/MatrixFunctions>
 #include <limits>
 #include <sstream>
-#include "/home/masselmeier/Desktop/Research/vcpkg/installed/x64-linux/include/matplotlibcpp.h"
+#include "/home/masselmeier3/Desktop/Research/vcpkg/installed/x64-linux/include/matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
@@ -99,7 +99,7 @@ namespace gap_estimation {
         previous_measurements.push_back(measurement);
         previous_ego_accels.push_back(ego_accels);
         previous_ego_vels.push_back(ego_vels);
-        plot_dir = "/home/masselmeier/catkin_ws/src/gap_estimation/estimator_plots/";
+        plot_dir = "/home/masselmeier3/catkin_ws/src/gap_estimation/estimator_plots/";
         perfect = true;
 
         alpha_R = 1.0;
