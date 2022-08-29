@@ -38,8 +38,8 @@ namespace gap_estimation {
         // MEASUREMENT NOISE
         // Bigger R: better performance with static things (weighting robot's motion more)
         // I think 0.1 is roughly the minimum we can do. Otherwise, measurements get really noisy
-        R << 0.0001, 0.0,
-             0.0, 0.0001;
+        R << 0.1, 0.0,
+             0.0, 0.1;
 
         // PROCESS NOISE
         // Bigger Q: Better with dynamic things (weighting measurements more)
@@ -102,7 +102,7 @@ namespace gap_estimation {
         plot_dir = "/home/masselmeier3/catkin_ws/src/gap_estimation/estimator_plots/";
         perfect = true;
 
-        alpha_R = 1.0;
+        // alpha_R = 0.3;
     }
 
     void cart_model::integrate() {
@@ -160,11 +160,11 @@ namespace gap_estimation {
 
     // this does give off-diagonal terms to Q, so init diagonal Q is fine
     void cart_model::discretizeQ() {
-        /*
+        
         double ang_vel_ego = v_ego[2];
 
-        double vdot_x_body = a_ego[0] + v_ego[1]*ang_vel_ego;
-        double vdot_y_body = a_ego[1] - v_ego[0]*ang_vel_ego;
+        double vdot_x_body = a_ego[0]; //  + v_ego[1]*ang_vel_ego;
+        double vdot_y_body = a_ego[1]; // - v_ego[0]*ang_vel_ego;
 
         Q << 0.0, 0.0, 0.0, 0.0,
              0.0, 0.0, 0.0, 0.0,
@@ -175,7 +175,7 @@ namespace gap_estimation {
         ROS_INFO_STREAM("   " << Q(1, 0) << ", " << Q(1, 1) << ", " << Q(1, 2) << ", " << Q(1, 3));
         ROS_INFO_STREAM("   " << Q(2, 0) << ", " << Q(2, 1) << ", " << Q(2, 2) << ", " << Q(2, 3));
         ROS_INFO_STREAM("   " << Q(3, 0) << ", " << Q(3, 1) << ", " << Q(3, 2) << ", " << Q(3, 3));
-        */
+        
         Q_1 = Q;
         Q_2 = A * Q_1 + Q_1 * A.transpose();
         Q_3 = A * Q_2 + Q_2 * A.transpose();
@@ -339,8 +339,8 @@ namespace gap_estimation {
         plt::close();
 
         plt::figure_size(1200, 780);
-        plt::scatter(t, a_xs, 25.0, {{"label", "a_x"}});
-        plt::scatter(t, v_ego_angs, 25.0, {{"label", "v_ego"}});
+        // plt::scatter(t, a_xs, 25.0, {{"label", "a_x"}});
+        // plt::scatter(t, v_ego_angs, 25.0, {{"label", "v_ego"}});
         plt::scatter(t, v_xs_GT, 25.0, {{"label", "v_x (GT)"}});
         plt::scatter(t, v_xs, 25.0, {{"label", "v_x"}});
         plt::xlim(0, 10);
@@ -349,8 +349,8 @@ namespace gap_estimation {
         plt::close();
 
         plt::figure_size(1200, 780);
-        plt::scatter(t, a_xs, 25.0, {{"label", "a_x"}});
-        plt::scatter(t, v_ego_angs, 25.0, {{"label", "v_ego"}});
+        // plt::scatter(t, a_xs, 25.0, {{"label", "a_x"}});
+        // plt::scatter(t, v_ego_angs, 25.0, {{"label", "v_ego"}});
         plt::scatter(t, v_ys_GT, 25.0, {{"label", "v_y (GT)"}});
         plt::scatter(t, v_ys, 25.0, {{"label", "v_y"}});
         plt::xlim(0, 10);
